@@ -1,0 +1,6 @@
+{
+  "name": "Bài 11 · 介绍 | Ôn tập & Luyện nghe tiếng Trung",
+  "description": "Ứng dụng học tiếng Trung Bài 11: 介绍 (Giới thiệu) - đồng bộ âm thanh chuẩn bài khóa và từ vựng bản xứ, luyện viết chữ Hán, trò chơi Word Ninja & Memory, bài tập tương tác.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
