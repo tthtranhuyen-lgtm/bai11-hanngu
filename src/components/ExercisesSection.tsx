@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { EX1_DATA, EX2_DATA, EX3_DATA } from '../data/chineseData';
-import { playSfxClick, playSfxSuccess, playSfxMiss, playSentence } from '../utils/audioPlayer';
-import { CheckCircle2, RotateCcw, Volume2, Sparkles } from 'lucide-react';
+import { CheckCircle2, RotateCcw } from 'lucide-react';
+import { playSfxClick, playSfxSuccess, playSfxMiss } from '../utils/audioPlayer';
 
 interface ExercisesSectionProps {
   exerciseTab: 'ex1' | 'ex2' | 'ex3';
@@ -238,18 +238,6 @@ export const ExercisesSection: React.FC<ExercisesSectionProps> = ({ exerciseTab 
                       </div>
                     )}
                   </div>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      playSfxClick();
-                      playSentence(item.text.replace('___', item.ans));
-                    }}
-                    title="Nghe phát âm chuẩn câu này"
-                    className="w-8 h-8 rounded-full bg-purple-100 text-purple-700 hover:bg-purple-200 flex items-center justify-center shrink-0 transition hover:scale-110 shadow-xs mt-1"
-                  >
-                    <Volume2 className="w-4 h-4" />
-                  </button>
                 </div>
               );
             })}
@@ -318,21 +306,10 @@ export const ExercisesSection: React.FC<ExercisesSectionProps> = ({ exerciseTab 
                       : 'bg-white border-purple-100'
                   }`}
                 >
-                  <div className="flex items-start justify-between gap-3 mb-1">
+                  <div className="mb-1">
                     <div className="text-base sm:text-lg font-bold text-gray-800">
                       <b>{qIdx + 1}.</b> {item.q}
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        playSfxClick();
-                        playSentence(item.q.replace('___', item.opts[item.ans].t));
-                      }}
-                      title="Nghe phát âm chuẩn câu này"
-                      className="w-8 h-8 rounded-full bg-purple-100 text-purple-700 hover:bg-purple-200 flex items-center justify-center shrink-0 transition hover:scale-110 shadow-xs"
-                    >
-                      <Volume2 className="w-4 h-4" />
-                    </button>
                   </div>
                   <div className="text-xs sm:text-sm text-purple-500 font-medium mb-3.5">
                     {item.py}
@@ -422,21 +399,13 @@ export const ExercisesSection: React.FC<ExercisesSectionProps> = ({ exerciseTab 
                       : 'bg-white border-purple-100'
                   }`}
                 >
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="text-xs sm:text-sm text-gray-500 italic">
-                      💡 Nghĩa: {item.hint}
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        playSfxClick();
-                        playSentence(item.ans[0]);
-                      }}
-                      title="Nghe phát âm chuẩn câu này"
-                      className="w-8 h-8 rounded-full bg-purple-100 text-purple-700 hover:bg-purple-200 flex items-center justify-center shrink-0 transition hover:scale-110 shadow-xs"
-                    >
-                      <Volume2 className="w-4 h-4" />
-                    </button>
+                  <div className="flex items-center justify-between gap-2 pb-0.5">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-100 text-purple-700 font-bold text-xs">
+                      <span>Câu {qIdx + 1}</span>
+                    </span>
+                    <span className="text-xs text-gray-400 font-medium">
+                      {state.placed.length} / {item.words.length} từ
+                    </span>
                   </div>
 
                   {/* Answer Area */}
