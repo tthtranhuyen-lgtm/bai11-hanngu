@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <script>
+      // Prevent extensions from failing when patching window.fetch
+      (function() {
+        try {
+          var _origFetch = window.fetch ? window.fetch.bind(window) : null;
+          var _fetch = _origFetch;
+          Object.defineProperty(window, 'fetch', {
+            configurable: true,
+            enumerable: true,
+            get: function() {
+              return _fetch;
+            },
+            set: function(val) {
+              _fetch = val;
+            }
+          });
+        } catch (_) {}
+      })();
+    </script>
+    <title>Bài 11 · 介绍 | Ôn tập & Luyện nghe tiếng Trung</title>
+    <meta name="description" content="Ứng dụng học tiếng Trung Bài 11: 介绍 (Giới thiệu) - đồng bộ âm thanh chuẩn bài khóa và từ vựng bản xứ, luyện viết chữ Hán, trò chơi Word Ninja & Memory, bài tập tương tác." />
+    <meta property="og:title" content="Bài 11 · 介绍 | Ôn tập & Luyện nghe tiếng Trung" />
+    <meta property="og:description" content="Ứng dụng học tiếng Trung Bài 11: 介绍 (Giới thiệu) - đồng bộ âm thanh chuẩn bài khóa và từ vựng bản xứ, luyện viết chữ Hán, trò chơi Word Ninja & Memory, bài tập tương tác." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <!-- Soft Rounded Typography & Chinese Calligraphy Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500;600;700&family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,600&family=Quicksand:wght@400;500;600;700&family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;500;600;700;900&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet" />
+    <!-- HanziWriter library for stroke order animations -->
+    <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+    <script type="module" crossorigin src="./assets/index-BVG7mG_Y.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-wq8KRboQ.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
+
