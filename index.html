@@ -3,6 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <script>
+      // Prevent extensions from failing when patching window.fetch
+      (function() {
+        try {
+          var _origFetch = window.fetch ? window.fetch.bind(window) : null;
+          var _fetch = _origFetch;
+          Object.defineProperty(window, 'fetch', {
+            configurable: true,
+            enumerable: true,
+            get: function() {
+              return _fetch;
+            },
+            set: function(val) {
+              _fetch = val;
+            }
+          });
+        } catch (_) {}
+      })();
+    </script>
     <title>Bài 11 · 介绍 | Ôn tập & Luyện nghe tiếng Trung</title>
     <meta name="description" content="Ứng dụng học tiếng Trung Bài 11: 介绍 (Giới thiệu) - đồng bộ âm thanh chuẩn bài khóa và từ vựng bản xứ, luyện viết chữ Hán, trò chơi Word Ninja & Memory, bài tập tương tác." />
     <meta property="og:title" content="Bài 11 · 介绍 | Ôn tập & Luyện nghe tiếng Trung" />

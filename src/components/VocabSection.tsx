@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { VOCAB_WORDS, VocabWord } from '../data/chineseData';
-import { playWord, playSentence, playSfxClick } from '../utils/audioPlayer';
+import { playWord, playSentence, playSfxClick, resolveAssetUrl } from '../utils/audioPlayer';
 import { Volume2, Play, Pause, RotateCcw } from 'lucide-react';
 
 export const VocabSection: React.FC = () => {
@@ -42,7 +42,7 @@ export const VocabSection: React.FC = () => {
   const handleTogglePlayFull = () => {
     playSfxClick();
     if (!fullAudioRef.current) {
-      const audio = new Audio('/assets/aistudio/11-4_98e89e45.mp3');
+      const audio = new Audio(resolveAssetUrl('/assets/aistudio/11-4_98e89e45.mp3'));
       fullAudioRef.current = audio;
 
       audio.ontimeupdate = () => {

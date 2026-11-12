@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { DIALOGUE_SECTIONS, DialogueLine, DialogueSection as IDialogueSection } from '../data/chineseData';
-import { playDialogueLineAudio, playSfxClick } from '../utils/audioPlayer';
+import { playDialogueLineAudio, playSfxClick, resolveAssetUrl } from '../utils/audioPlayer';
 import { Play, Pause, RotateCcw, Volume2, FastForward, CheckCircle2 } from 'lucide-react';
 
 export const DialogueSection: React.FC = () => {
@@ -19,7 +19,7 @@ export const DialogueSection: React.FC = () => {
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.pause();
-      audioRef.current.src = currentSection.fullAudio;
+      audioRef.current.src = resolveAssetUrl(currentSection.fullAudio);
       audioRef.current.currentTime = 0;
       setCurrentTime(0);
       setIsPlayingFull(false);
@@ -49,7 +49,7 @@ export const DialogueSection: React.FC = () => {
 
   const initAudio = () => {
     if (!audioRef.current) {
-      const audio = new Audio(currentSection.fullAudio);
+      const audio = new Audio(resolveAssetUrl(currentSection.fullAudio));
       audioRef.current = audio;
 
       audio.ontimeupdate = () => {

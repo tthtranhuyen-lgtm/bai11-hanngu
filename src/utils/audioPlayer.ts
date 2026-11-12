@@ -109,6 +109,24 @@ export function stopAllAudio() {
 }
 
 /**
+ * Safely resolves an asset URL relative to Vite base (e.g. for GitHub Pages subpath hosting)
+ */
+export function resolveAssetUrl(url: string): string {
+  if (!url) return '';
+  if (
+    url.startsWith('http://') ||
+    url.startsWith('https://') ||
+    url.startsWith('data:') ||
+    url.startsWith('blob:')
+  ) {
+    return url;
+  }
+  const clean = url.startsWith('/') ? url.slice(1) : url;
+  const base = import.meta.env.BASE_URL || './';
+  return `${base}${clean}`;
+}
+
+/**
  * Play an audio URL with speed setting and fallback to SpeechSynthesis
  */
 export function playAudioUrl(
@@ -119,7 +137,8 @@ export function playAudioUrl(
 ): Promise<void> {
   return new Promise((resolve) => {
     stopAllAudio();
-    const targetUrl = url || (fallbackText && exampleAudioMap[fallbackText]) || '';
+    const rawTarget = url || (fallbackText && exampleAudioMap[fallbackText]) || '';
+    const targetUrl = resolveAssetUrl(rawTarget);
 
     if (!targetUrl && fallbackText) {
       // Use standard Google TTS URL
