@@ -69,7 +69,6 @@ export const VOCAB_WORDS: VocabWord[] = [
     fullAudioEnd: 11.90,
     ex: [
       ['我介绍一下。', 'Tôi giới thiệu một chút.'],
-      ['这是介绍信。', 'Đây là thư giới thiệu.'],
       ['我先介绍一下。', 'Tôi giới thiệu trước nhé.']
     ]
   },

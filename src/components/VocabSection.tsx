@@ -9,9 +9,13 @@ export const VocabSection: React.FC = () => {
   const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({});
   const [activeWordId, setActiveWordId] = useState<string | null>(null);
 
+  // Start straight into the first vocab word without the introductory book/lesson title
+  const firstWordStart = VOCAB_WORDS[0]?.fullAudioStart ?? 6.8;
+  const lastWordEnd = VOCAB_WORDS[VOCAB_WORDS.length - 1]?.fullAudioEnd ?? 61.5;
+
   // Full Audio Playback State for 11-4
   const [isFullPlaying, setIsFullPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
+  const [currentTime, setCurrentTime] = useState(firstWordStart);
   const [duration, setDuration] = useState(62.27);
   const fullAudioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -44,6 +48,7 @@ export const VocabSection: React.FC = () => {
     if (!fullAudioRef.current) {
       const audio = new Audio(resolveAssetUrl('/assets/aistudio/11-4_98e89e45.mp3'));
       fullAudioRef.current = audio;
+      audio.currentTime = firstWordStart;
 
       audio.ontimeupdate = () => {
         setCurrentTime(audio.currentTime);
@@ -54,6 +59,10 @@ export const VocabSection: React.FC = () => {
       audio.onended = () => {
         setIsFullPlaying(false);
         setActiveWordId(null);
+        if (fullAudioRef.current) {
+          fullAudioRef.current.currentTime = firstWordStart;
+          setCurrentTime(firstWordStart);
+        }
       };
     }
 
@@ -64,6 +73,11 @@ export const VocabSection: React.FC = () => {
       audio.pause();
       setIsFullPlaying(false);
     } else {
+      // Jump directly into first vocab word if currently before lesson start or at the end
+      if (audio.currentTime < firstWordStart || audio.currentTime >= lastWordEnd) {
+        audio.currentTime = firstWordStart;
+        setCurrentTime(firstWordStart);
+      }
       audio.play().then(() => setIsFullPlaying(true)).catch(() => {});
     }
   };
@@ -71,8 +85,8 @@ export const VocabSection: React.FC = () => {
   const handleRestartFull = () => {
     playSfxClick();
     if (fullAudioRef.current) {
-      fullAudioRef.current.currentTime = 0;
-      setCurrentTime(0);
+      fullAudioRef.current.currentTime = firstWordStart;
+      setCurrentTime(firstWordStart);
       if (!isFullPlaying) {
         fullAudioRef.current.play().then(() => setIsFullPlaying(true)).catch(() => {});
       }

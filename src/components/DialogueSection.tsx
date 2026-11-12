@@ -5,27 +5,33 @@ import { Play, Pause, RotateCcw, Volume2, FastForward, CheckCircle2 } from 'luci
 
 export const DialogueSection: React.FC = () => {
   const [selectedSectionIdx, setSelectedSectionIdx] = useState<number>(0);
+  const currentSection: IDialogueSection = DIALOGUE_SECTIONS[selectedSectionIdx] || DIALOGUE_SECTIONS[0];
+  const sectionStart = currentSection.lines[0]?.start ?? 0;
+  const sectionEnd = currentSection.lines[currentSection.lines.length - 1]?.end ?? 40.49;
+
   const [isPlayingFull, setIsPlayingFull] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
+  const [currentTime, setCurrentTime] = useState(sectionStart);
   const [duration, setDuration] = useState(40.49);
   const [speed, setSpeed] = useState(0.85);
   const [activeLineId, setActiveLineId] = useState<string | null>(null);
   const [autoScroll, setAutoScroll] = useState(true);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const currentSection: IDialogueSection = DIALOGUE_SECTIONS[selectedSectionIdx] || DIALOGUE_SECTIONS[0];
 
   // Set up audio whenever section changes
   useEffect(() => {
+    const start = currentSection.lines[0]?.start ?? 0;
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.src = resolveAssetUrl(currentSection.fullAudio);
-      audioRef.current.currentTime = 0;
-      setCurrentTime(0);
+      audioRef.current.currentTime = start;
+      setCurrentTime(start);
       setIsPlayingFull(false);
       setActiveLineId(null);
+    } else {
+      setCurrentTime(start);
     }
-  }, [selectedSectionIdx, currentSection.fullAudio]);
+  }, [selectedSectionIdx, currentSection]);
 
   // Track active line in real-time
   useEffect(() => {
@@ -51,6 +57,8 @@ export const DialogueSection: React.FC = () => {
     if (!audioRef.current) {
       const audio = new Audio(resolveAssetUrl(currentSection.fullAudio));
       audioRef.current = audio;
+      const start = currentSection.lines[0]?.start ?? 0;
+      audio.currentTime = start;
 
       audio.ontimeupdate = () => {
         setCurrentTime(audio.currentTime);
@@ -61,6 +69,11 @@ export const DialogueSection: React.FC = () => {
       audio.onended = () => {
         setIsPlayingFull(false);
         setActiveLineId(null);
+        if (audioRef.current) {
+          const resetStart = currentSection.lines[0]?.start ?? 0;
+          audioRef.current.currentTime = resetStart;
+          setCurrentTime(resetStart);
+        }
       };
     }
     return audioRef.current;
@@ -70,11 +83,18 @@ export const DialogueSection: React.FC = () => {
     playSfxClick();
     const audio = initAudio();
     audio.playbackRate = speed;
+    const start = currentSection.lines[0]?.start ?? 0;
+    const end = currentSection.lines[currentSection.lines.length - 1]?.end ?? duration;
 
     if (isPlayingFull) {
       audio.pause();
       setIsPlayingFull(false);
     } else {
+      // Jump directly into the dialogue lines without the original book/lesson intro
+      if (audio.currentTime < start || audio.currentTime >= end) {
+        audio.currentTime = start;
+        setCurrentTime(start);
+      }
       audio.play().then(() => setIsPlayingFull(true)).catch(() => {});
     }
   };
@@ -88,8 +108,9 @@ export const DialogueSection: React.FC = () => {
   const handleRestart = () => {
     playSfxClick();
     const audio = initAudio();
-    audio.currentTime = 0;
-    setCurrentTime(0);
+    const start = currentSection.lines[0]?.start ?? 0;
+    audio.currentTime = start;
+    setCurrentTime(start);
     audio.playbackRate = speed;
     audio.play().then(() => setIsPlayingFull(true)).catch(() => {});
   };
